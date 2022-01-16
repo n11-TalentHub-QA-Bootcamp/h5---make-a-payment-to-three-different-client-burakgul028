@@ -6,10 +6,16 @@
 # scenario
 # make payment for each country in countries list
 #logout test
-Feature: make a payment to three different client
-@step1
-Scenario:make a payment to three different client
-When User login with user valid credentails
-And I click make payment button for deposit
-And  User make a deposit entering payment details
-Then  User should check to balance
+Feature: make a payment
+  @homework5
+  Scenario Outline: make a payment to three different client
+    When user login in Eribank App
+    And user make a payment "<phone>" "<name>" "<client>" "<amount>"
+    Then user check balance
+    And user logout Eribank
+    Examples:
+    | phone | name | client | amount |
+    | 11111 | user1 | China | 10 |
+    | 22222 | user2 | USA | 10 |
+    | 33333 | user3 | Japan | 10 |
+

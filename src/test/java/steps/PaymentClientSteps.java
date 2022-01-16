@@ -1,5 +1,6 @@
 package steps;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import net.serenitybdd.screenplay.Actor;
@@ -10,15 +11,17 @@ import net.thucydides.core.annotations.Managed;
 import org.junit.Before;
 import org.openqa.selenium.WebDriver;
 import tasks.LoginToEriBank;
+import tasks.LogoutToEriBank;
 import tasks.Payment;
 import ui.HomePageElements;
+
 
 public class PaymentClientSteps {
 
     @Managed(driver = "Appium")
     public WebDriver herMobileDevice;
 
-    String actorName="hhag";
+    String actorName="burak";
     Actor actor = Actor.named(actorName);
 
     @Before
@@ -26,22 +29,28 @@ public class PaymentClientSteps {
         OnStage.setTheStage(new OnlineCast());
     }
 
-    @When("User login with user valid credentails")
-    public void user_login_with_user_valid_credentails() {
+
+    @When("user login in Eribank App")
+    public void userLoginInEribankApp() {
         actor.can(BrowseTheWeb.with(herMobileDevice));
         actor.attemptsTo(LoginToEriBank.login("company","company"));
     }
-    @When("I click make payment button for deposit")
-    public void ı_click_make_payment_button_for_deposit() {
-        actor.attemptsTo(Payment.login());
-    }
-    @When("User make a deposit entering payment details")
-    public void user_make_a_deposit_entering_payment_details() {
 
-    }
-    @Then("User should check to balance")
-    public void user_should_check_to_balance() {
-
+    @And("user make a payment {string} {string} {string} {string}")
+    public void userMakeAPayment(String phone, String name, String amount, String client) {
+        actor.attemptsTo(Payment.type(phone, name, amount, client));
     }
 
+    @Then("user check balance")
+    public void userCheckBalanceAmount() {
+        actor.attemptsTo(
+                //Ensure.that(HomePageElements.BALANCE_CHECK)
+                        //.attribute("content-desc")
+        );
+    }
+
+    @And("user logout Eribank")
+    public void userLogoutEriBank() {
+        actor.attemptsTo(LogoutToEriBank.logout());
+    }
 }
